@@ -35,6 +35,19 @@ class BlockSerializer(serializers.Serializer):  # pylint: disable=abstract-metho
         Return a serializable representation of the requested block
         """
         # create response data dict for basic fields
+
+        authorization_denial_reason = self.context['block_structure'].get_xblock_field(block_key, 'authorization_denial_reason')
+        authorization_denial_message = self.context['block_structure'].get_xblock_field(block_key, 'authorization_denial_message')
+
+        if authorization_denial_reason and authorization_denial_message:
+            data = {
+                'id': unicode(block_key),
+                'block_id': unicode(block_key.block_id),
+                'authorization_denial_reason': authorization_denial_reason,
+                'authorization_denial_message': authorization_denial_message
+            }
+            return data
+
         data = {
             'id': unicode(block_key),
             'block_id': unicode(block_key.block_id),
